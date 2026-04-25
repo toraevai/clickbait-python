@@ -4,10 +4,13 @@ import csv
 from tabulate import tabulate
 
 def parse_file(path, videos):
-    with open(path, mode='r', newline='', encoding='utf-8') as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            videos.append(row)
+    if Path(path).exists():
+        with open(path, mode='r', newline='', encoding='utf-8') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                videos.append(row)
+    else:
+        print(f"Файл по пути {path} отсутствует")
 
 def process_clickbait(videos):
     filtered_videos = [video for video in videos if float(video["ctr"]) > 15 and int(video["retention_rate"]) < 40]
@@ -32,15 +35,18 @@ def main():
             for file in files:
                 parse_file(file, videos)
     else:
-        print("Вы не указали файлы, который необходимо обработать")
+        print("Вы не указали файлы, которые необходимо обработать")
     
     reports = args.report
-    for report in reports:
-        match report:
-            case "clickbait":
-                process_clickbait(videos)
-            case _:
-                print(f"Отчет {report} еще не реализован")
+    if reports:
+        for report in reports:
+            match report:
+                case "clickbait":
+                    process_clickbait(videos)
+                case _:
+                    print(f"Отчет {report} еще не реализован")
+    else:
+        print("Вы не указали отчет, который необходимо вывести")
 
 
 if __name__ == "__main__":
