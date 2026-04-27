@@ -1,1 +1,5 @@
 pyproject.toml
+__pycache__/
+.vscode/
+.coverage
+.gitignore
