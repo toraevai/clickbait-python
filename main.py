@@ -8,7 +8,8 @@ def parse_file(path, videos):
         with open(path, mode='r', newline='', encoding='utf-8') as file:
             reader = csv.DictReader(file)
             for row in reader:
-                videos.append(row)
+                if (row not in videos):
+                    videos.append(row)
     else:
         print(f"Файл по пути {path} отсутствует")
 
